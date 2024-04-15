@@ -1,89 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Picture Voting</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-image: url("360_F_571060336_lRFo9ZoUUYDzcKb6dHKMs8unl2TM98rr.jpg");
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        #image-container {
-            margin-top: 50px;
-        }
-        #image-container img {
-            width: 300px;
-            border-radius: 10px;
-        }
-        #buttons {
-            margin-top: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            margin: 0 10px;
-            cursor: pointer;
-            border: none;
-            color: white;
-            border-radius: 30px; /* making buttons oval shaped */
-            background-color: goldenrod; /* setting golden color */
-            transition: transform 0.2s;
-        }
-        #no-button {
-            position: relative;
-        }
-        button:hover {
-            transform: scale(1.1); /* adding hover effect */
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Randomly Moving Images</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background-image: url("AdobeStock_521225307_Preview.jpeg"); /* Replace 'background.jpg' with your image path */
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed; /* Keeps the background image fixed while scrolling */
+    }
+    .image {
+        position: absolute;
+        width: 150px; /* Adjust as needed */
+        height: 100px; /* Adjust as needed */
+        transition: transform 1s ease-in-out;
+    }
+    .back-button {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1001; /* Ensures the button appears above the zoomed image */
+        background-color: rgba(255, 255, 255, 0.5);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+</style>
 </head>
 <body>
-    <!-- Background music -->
-    <audio src="music.mp3" autoplay loop></audio>
 
-    <div id="image-container">
-        <img id="main-image" src="will-you-be-my-valentine-happy-valentine-s-day-vector.jpg" alt="Image">
-    </div>
-    <div id="buttons">
-        <button id="yes-button">Yes</button>
-        <button id="no-button">No</button>
-    </div>
+<script>
+    function moveImageRandomly(image) {
+        const x = Math.random() * (window.innerWidth - image.width);
+        const y = Math.random() * (window.innerHeight - image.height);
+        image.style.transform = `translate(${x}px, ${y}px)`;
+    }
 
-    <script>
-        const yesButton = document.getElementById('yes-button');
-        const noButton = document.getElementById('no-button');
-        const mainImage = document.getElementById('main-image');
+    function enlargeImage(image) {
+        image.style.transform = 'scale(2)';
+        image.style.zIndex = '1000';
+        image.style.position = 'fixed';
+        image.style.top = '0';
+        image.style.left = '0';
+        image.style.width = '100vw';
+        image.style.height = '100vh';
+        image.style.cursor = 'pointer';
 
-        // Array of images
-        const images = ["love you.jpg"];
-        let currentIndex = 0;
+        const backButton = document.createElement('button');
+        backButton.textContent = 'Back';
+        backButton.className = 'back-button';
+        backButton.onclick = function () {
+            image.style.transform = 'none';
+            image.style.zIndex = 'initial';
+            image.style.position = 'absolute';
+            image.style.width = '150px'; /* Adjust as needed */
+            image.style.height = '100px'; /* Adjust as needed */
+            backButton.style.display = 'none';
+        };
+        document.body.appendChild(backButton);
 
-        // Function to change the image
-        function changeImage() {
-            currentIndex = (currentIndex + 1) % images.length;
-            mainImage.src = images[currentIndex];
-            // Hide the No button when Yes is clicked
-            noButton.style.display = 'none';
-        }
+        backButton.style.display = 'block';
+    }
 
-        yesButton.addEventListener('click', changeImage);
+    function startBackgroundMusic() {
+        const audio = document.createElement('audio');
+        audio.src = 'your-audio-file.mp3'; // Replace with your audio file path
+        audio.autoplay = true;
+        audio.loop = true;
+        document.body.appendChild(audio);
+    }
 
-        noButton.addEventListener('click', () => {
-            const rect = noButton.getBoundingClientRect();
-            const randomX = Math.random() * (window.innerWidth - rect.width);
-            const randomY = Math.random() * (window.innerHeight - rect.height);
-            noButton.style.position = 'absolute';
-            noButton.style.left = randomX + 'px';
-            noButton.style.top = randomY + 'px';
+    window.onload = function () {
+        const images = document.querySelectorAll('.image');
+        images.forEach(image => {
+            moveImageRandomly(image);
+            setInterval(() => moveImageRandomly(image), 3000);
+            image.onclick = function () {
+                if (confirm("Do you want to start the music?")) {
+                    startBackgroundMusic();
+                }
+                enlargeImage(this);
+            };
         });
-    </script>
+    };
+</script>
+
+<img class="image" src="WhatsApp Image 2024-04-15 at 2.34.39 PM (1).jpeg" alt="Image 1">
+<img class="image" src="WhatsApp Image 2024-04-15 at 2.34.39 PM.jpeg" alt="Image 2">
+<img class="image" src="WhatsApp Image 2024-04-15 at 2.34.40 PM.jpeg" alt="Image 3">
+<!-- Add more images as needed -->
 </body>
 </html>
