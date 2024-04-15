@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picture Voting</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url("360_F_571060336_lRFo9ZoUUYDzcKb6dHKMs8unl2TM98rr.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #image-container {
+            margin-top: 50px;
+        }
+        #image-container img {
+            width: 300px;
+            border-radius: 10px;
+        }
+        #buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            border-radius: 30px; /* making buttons oval shaped */
+            background-color: goldenrod; /* setting golden color */
+            transition: transform 0.2s;
+        }
+        #no-button {
+            position: relative;
+        }
+        button:hover {
+            transform: scale(1.1); /* adding hover effect */
+        }
+    </style>
+</head>
+<body>
+    <!-- Background music -->
+    <audio src="music.mp3" autoplay loop></audio>
+
+    <div id="image-container">
+        <img id="main-image" src="will-you-be-my-valentine-happy-valentine-s-day-vector.jpg" alt="Image">
+    </div>
+    <div id="buttons">
+        <button id="yes-button">Yes</button>
+        <button id="no-button">No</button>
+    </div>
+
+    <script>
+        const yesButton = document.getElementById('yes-button');
+        const noButton = document.getElementById('no-button');
+        const mainImage = document.getElementById('main-image');
+
+        // Array of images
+        const images = ["love you.jpg"];
+        let currentIndex = 0;
+
+        // Function to change the image
+        function changeImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            mainImage.src = images[currentIndex];
+            // Hide the No button when Yes is clicked
+            noButton.style.display = 'none';
+        }
+
+        yesButton.addEventListener('click', changeImage);
+
+        noButton.addEventListener('click', () => {
+            const rect = noButton.getBoundingClientRect();
+            const randomX = Math.random() * (window.innerWidth - rect.width);
+            const randomY = Math.random() * (window.innerHeight - rect.height);
+            noButton.style.position = 'absolute';
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+        });
+    </script>
+</body>
+</html>
